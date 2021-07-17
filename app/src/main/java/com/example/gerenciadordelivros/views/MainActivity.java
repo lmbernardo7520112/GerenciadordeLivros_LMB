@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLi
     public void onLivroClick(int posicao) {
         //Toast.makeText(this, "onLivroClick ="+(posicao+1), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), EditarLivroActivity.class);
-        intent.putExtra("livro", livroAdapter)
+        intent.putExtra("livro", livroAdapter.getItem(posicao));
+        startActivityForResult(intent, 101);
     }
 
     @Override

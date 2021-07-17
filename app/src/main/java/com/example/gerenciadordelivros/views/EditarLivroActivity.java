@@ -20,6 +20,8 @@ public class EditarLivroActivity extends AppCompatActivity {
 
     private LivroDAO livroDAO;
 
+    private Livro livro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,15 @@ public class EditarLivroActivity extends AppCompatActivity {
         chk_emprestimo = findViewById(R.id.check_emprestado);
 
         livroDAO = LivroDAO.getInstance(this);
+
+        livro = (Livro) getIntent().getSerializableExtra("livro");
+
+        if(livro != null){
+            edt_titulo.setText(livro.getTitulo());
+            edt_autor.setText(livro.getAutor());
+            edt_editora.setText(livro.getEditora());
+            chk_emprestimo.setChecked((livro.getEmprestado() == 1) ? true : false);
+        }
     }
 
     public void cancelar(View view) {

@@ -16,6 +16,8 @@ import com.example.gerenciadordelivros.dominios.Livro;
 
 import java.util.List;
 
+import static android.media.CamcorderProfile.get;
+
 public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.LivroHolder> {
 
     private List<Livro> livros;
@@ -61,6 +63,11 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.LivroHolder>
     public void setItems(List<Livro> livros){
         this.livros = livros;
     }
+
+    public  Livro getItem(int posicao){
+        return livros.get(posicao);
+    }
+
 
     public class LivroHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
