@@ -1,30 +1,33 @@
 package com.example.gerenciadordelivros.views;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.gerenciadordelivros.R;
 import com.example.gerenciadordelivros.adapter.LivroAdapter;
 import com.example.gerenciadordelivros.data.LivroDAO;
+import com.example.gerenciadordelivros.dialogs.DeleteDialog;
 import com.example.gerenciadordelivros.dominios.Livro;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLivroListener {
+public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLivroListener, DeleteDialog.onDeleteListener {
 
     private LivroDAO livroDAO;
     LivroAdapter livroAdapter;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLi
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLi
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void atualizaListaLivros(){
         List<Livro> livros = livroDAO.list();
         livroAdapter.setItems(livros);
@@ -97,8 +102,24 @@ public class MainActivity extends AppCompatActivity implements LivroAdapter.OnLi
         startActivityForResult(intent, 101);
     }
 
+
     @Override
     public void onLivroLongClick(int posicao) {
-        Toast.makeText(this, "onLivroLongClick ="+(posicao+1), Toast.LENGTH_LONG).show();
+
+        Livro livro = livroAdapter.getItem(posicao);
+        DeleteDialog dialog = new DeleteDialog();
+        dialog.setLivro(livro);
+        dialog.show(getSupportFragmentManager(), "deleteDialod");
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onDelete(Livro livro) {
+
+        livroDAO.delete(livro);
+        atualizaListaLivros();
+        Toast.makeText(this, "Livro excluído com sucesso!", Toast.LENGTH_LONG).show();
+
     }
 }

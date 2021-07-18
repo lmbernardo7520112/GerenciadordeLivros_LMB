@@ -1,11 +1,13 @@
 package com.example.gerenciadordelivros.views;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gerenciadordelivros.R;
 import com.example.gerenciadordelivros.data.LivroDAO;
@@ -55,9 +57,24 @@ public class EditarLivroActivity extends AppCompatActivity {
         String editora = edt_editora.getText().toString();
         int emprestimo = (chk_emprestimo.isChecked()) ? 1 : 0;
 
-        Livro livro = new Livro(titulo,autor,editora,emprestimo);
-        livroDAO.save(livro);
-        String msg = "Livro adicionado com sucesso! ID=" + livro.getId();
+        String msg;
+
+        if (livro == null){
+            Livro livro = new Livro(titulo,autor,editora,emprestimo);
+            livroDAO.save(livro);
+            msg = "Livro adicionado com sucesso! ID=" + livro.getId();
+        }else {
+            livro.setTitulo(titulo);
+            livro.setAutor(autor);
+            livro.setEditora(editora);
+            livro.setEmprestado(emprestimo);
+
+            livroDAO.update(livro);
+            msg = "Livro atualizado com sucesso! ID=" + livro.getId();
+        }
+
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
         finish();
     }

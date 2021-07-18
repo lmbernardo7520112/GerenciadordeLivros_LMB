@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.gerenciadordelivros.dominios.Livro;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ public class LivroDAO {
         return instance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public List<Livro> list() {
 
         String[] columns = {
@@ -79,7 +84,7 @@ public class LivroDAO {
         Long id = bd.insert(LivroContract.TABLE_NAME, null, values);
         livro.setId(id);
     }
-    public void updateLivro(Livro livro){
+    public void update(Livro livro){
         ContentValues values = new ContentValues();
 
         values.put(LivroContract.Columns.titulo,livro.getTitulo());
@@ -89,14 +94,14 @@ public class LivroDAO {
 
         bd.update(LivroContract.TABLE_NAME,
                 values,
-                LivroContract.Columns._ID+"?",
+                LivroContract.Columns._ID+"=?",
                 new String[]{String.valueOf(livro.getId())}
                 );
       }
 
       public void delete(Livro livro){
         bd.delete(LivroContract.TABLE_NAME,
-                LivroContract.Columns._ID+"?",
+                LivroContract.Columns._ID+"=?",
                 new String[]{String.valueOf(livro.getId())}
                 );
       }
